@@ -193,6 +193,20 @@ BBR之后移植入Linux内核4.9版本，并且对于QUIC可用。
 
 4）最后，使用 [Let's Encrypt](https://letsencrypt.org) 来签 一个证书。使用 Let's Encrypt 证书你需要在服务器上安装一个 [certbot](https://certbot.eff.org/instructions)，点击 [certbot](https://certbot.eff.org/instructions) 这个链接，你可以选择你的服务器，操作系统，然后就跟着指令走吧。
 
+
+在更新证书之前，确认IPTables规则已经打开80，443 port.
+
+```bash
+iptables -L -n -v --line-number
+```
+
+
+如果没有打开，请使用下面的命令添加规则
+```bash
+iptables -I INPUT 5 -p tcp -m tcp --dport 80 -j ACCEPT
+iptables -I INPUT 5 -p tcp -m tcp --dport 443 -j ACCEPT
+```
+
 接下来，你需要申请一个证书（我们使用standalone的方式，然后，你需要输入你的电子邮件和你解析到 VPS 的域名）：
 
 ```shell
@@ -268,21 +282,6 @@ curl -v "https://www.google.com" --proxy "https://DOMAIN" --proxy-user 'USER:PAS
 ```
 
 接下来就是证书的自动化更新。
-
-在更新证书之前，确认IPTables规则已经打开80，443 port.
-
-```bash
-iptables -L -n -v --line-number
-```
-
-
-如果没有打开，请使用下面的命令添加规则
-```bash
-iptables -I INPUT 5 -p tcp -m tcp --dport 80 -j ACCEPT
-iptables -I INPUT 5 -p tcp -m tcp --dport 443 -j ACCEPT
-```
-
-
 可以使用命令  `crontab -e`  来编辑定时任务：
 
 ```
