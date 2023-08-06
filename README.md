@@ -269,6 +269,20 @@ curl -v "https://www.google.com" --proxy "https://DOMAIN" --proxy-user 'USER:PAS
 
 接下来就是证书的自动化更新。
 
+在更新证书之前，确认IPTables规则已经打开80，443 port.
+
+```bash
+iptables -L -n -v --line-number
+```
+
+
+如果没有打开，请使用下面的命令添加规则
+```bash
+iptables -I INPUT 5 -p tcp -m tcp --dport 80 -j ACCEPT
+iptables -I INPUT 5 -p tcp -m tcp --dport 443 -j ACCEPT
+```
+
+
 可以使用命令  `crontab -e`  来编辑定时任务：
 
 ```
