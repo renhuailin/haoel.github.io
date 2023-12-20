@@ -241,6 +241,21 @@ sudo docker run -d --name gost \
     --net=host ginuerzh/gost \
     -L "http2://${USER}:${PASS}@${BIND_IP}:${PORT}?cert=${CERT}&key=${KEY}&probe_resist=code:404&knock=www.google.com"
 ```
+或者使用docker-compose来启动gost.
+```yaml
+version: '3'
+
+services:
+  gost:
+    image: ginuerzh/gost:latest
+    container_name: gost
+    restart: always
+    network_mode: "host"
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+    command: -L "http2://${USER}:${PASS}@0.0.0.0:${PORT}?cert=/etc/letsencrypt/live/${DOMAIN}/fullchain.pem&key=/etc/letsencrypt/live/${DOMAIN}/privkey.pem&probe_resist=code:404&knock=www.google.com"
+```
+
 
 上面这个脚本，你需要配置：域名(`DOMAIN`), 用户名 (`USER`), 密码 (`PASS`) 和 端口号(`PORT`) 这几个变量。
 
